@@ -21,19 +21,18 @@
     <script>
         document.getElementById('config-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            const params = new URLSearchParams({
-                clientId: document.getElementById('client-id').value,
-                accessToken: document.getElementById('access-token').value,
-                channelName: document.getElementById('channel-name').value,
-                background: document.getElementById('background-url').value,
-                gif: document.getElementById('gif-url').value,
-                goal: document.getElementById('goal-amount').value,
-                gifWidth: document.getElementById('gif-width').value,
-                gifBottom: document.getElementById('gif-bottom').value
-            });
-            const url = `${window.location.origin}/index.html?${params.toString()}`;
+            const clientId = document.getElementById('client-id').value;
+            const accessToken = document.getElementById('access-token').value;
+            const channelName = document.getElementById('channel-name').value;
+            const background = document.getElementById('background-url').value;
+            const gif = document.getElementById('gif-url').value;
+            const goal = document.getElementById('goal-amount').value;
+            const gifWidth = document.getElementById('gif-width').value;
+            const gifBottom = document.getElementById('gif-bottom').value;
+
+            const url = `${window.location.origin}/index.html?clientId=${encodeURIComponent(clientId)}&accessToken=${encodeURIComponent(accessToken)}&channelName=${encodeURIComponent(channelName)}&background=${encodeURIComponent(background)}&gif=${encodeURIComponent(gif)}&goal=${encodeURIComponent(goal)}&gifWidth=${encodeURIComponent(gifWidth)}&gifBottom=${encodeURIComponent(gifBottom)}`;
             document.getElementById('widget-url').innerHTML = `Usa esta URL en OBS: <a href="${url}" target="_blank">${url}</a>`;
-            window.location.href = url; // Redirige automáticamente a la URL generada
+            window.location.href = url;
         });
     </script>
 </body>

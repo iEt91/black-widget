@@ -6,10 +6,13 @@ const config = {
     channelName: urlParams.get('channelName') || 'tangov91',
     backgroundUrl: urlParams.get('background') || './img2.png',
     gifUrl: urlParams.get('gif') || './img1.gif',
-    goalAmount: parseInt(urlParams.get('goal')) || 100,
+    goalAmount: parseInt(urlParams.get('goal')) || 238, // Meta predeterminada ajustada a 238
     gifWidth: parseInt(urlParams.get('gifWidth')) || 165,
     gifBottom: parseInt(urlParams.get('gifBottom')) || 0
 };
+
+// Depuración: Mostrar los parámetros recibidos
+console.log('Parámetros recibidos:', Object.fromEntries(urlParams));
 
 // Aplicar estilos dinámicos
 document.getElementById('widget-container').style.backgroundImage = `url('${config.backgroundUrl}')`;
@@ -19,7 +22,7 @@ walkingPerson.style.width = `${config.gifWidth}px`;
 walkingPerson.style.height = `${config.gifWidth * (520/330)}px`;
 walkingPerson.style.bottom = `${config.gifBottom}px`;
 
-const GOAL_AMOUNT = parseInt(config.goalAmount);
+const GOAL_AMOUNT = parseInt(config.goalAmount) || 238; // Asegurar que siempre haya un valor válido
 const UPDATE_INTERVAL = 5000;
 
 async function fetchSubscribers() {
@@ -27,11 +30,12 @@ async function fetchSubscribers() {
         const response = await fetch(`/subscribers?clientId=${config.clientId}&accessToken=${config.accessToken}&channelName=${config.channelName}`);
         const data = await response.json();
         if (data.error) throw new Error(data.error);
-        const currentAmount = data.total || 0;
+        const currentAmount = parseInt(data.total) || 0;
 
         // Calcular el porcentaje
-        let percentage = Math.min((currentAmount / GOAL_AMOUNT) * 100, 100);
-        console.log(`Current Amount: ${currentAmount}, Goal: ${GOAL_AMOUNT}, Percentage: ${percentage}%`); // Para depurar
+        let percentage = (currentAmount / GOAL_AMOUNT) * 100;
+        percentage = Math.min(Math.max(percentage, 0), 100); // Limitar entre 0 y 100
+        console.log(`Current Amount: ${currentAmount}, Goal: ${GOAL_AMOUNT}, Percentage: ${percentage}%`);
 
         // Actualizar el texto del progreso
         document.getElementById('progress-text').innerText = `Progreso: ${percentage.toFixed(0)}%`;
@@ -41,7 +45,7 @@ async function fetchSubscribers() {
         const gifWidth = document.getElementById('walking-person').offsetWidth;
         const maxPosition = containerWidth - gifWidth;
         const leftPosition = (percentage / 100) * maxPosition;
-        console.log(`Container Width: ${containerWidth}, GIF Width: ${gifWidth}, Max Position: ${maxPosition}, Left Position: ${leftPosition}`); // Para depurar
+        console.log(`Container Width: ${containerWidth}, GIF Width: ${gifWidth}, Max Position: ${maxPosition}, Left Position: ${leftPosition}`);
         walkingPerson.style.left = `${leftPosition}px`;
     } catch (error) {
         console.error('Error:', error);
