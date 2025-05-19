@@ -17,21 +17,23 @@
         <label>Posición Vertical GIF (px desde abajo): <input type="number" id="gif-bottom" value="0"></label><br>
         <button type="submit">Generar Widget</button>
     </form>
+    <p id="widget-url"></p>
     <script>
         document.getElementById('config-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            const config = {
+            const params = new URLSearchParams({
                 clientId: document.getElementById('client-id').value,
                 accessToken: document.getElementById('access-token').value,
                 channelName: document.getElementById('channel-name').value,
-                backgroundUrl: document.getElementById('background-url').value,
-                gifUrl: document.getElementById('gif-url').value,
-                goalAmount: document.getElementById('goal-amount').value,
+                background: document.getElementById('background-url').value,
+                gif: document.getElementById('gif-url').value,
+                goal: document.getElementById('goal-amount').value,
                 gifWidth: document.getElementById('gif-width').value,
                 gifBottom: document.getElementById('gif-bottom').value
-            };
-            localStorage.setItem('widgetConfig', JSON.stringify(config));
-            window.location.href = 'index.html';
+            });
+            const url = `${window.location.origin}/index.html?${params.toString()}`;
+            document.getElementById('widget-url').innerHTML = `Usa esta URL en OBS: <a href="${url}" target="_blank">${url}</a>`;
+            window.location.href = url; // Redirige automáticamente a la URL generada
         });
     </script>
 </body>
