@@ -1,0 +1,13 @@
+{
+    "name": "twitch-widget",
+    "version": "1.0.0",
+    "description": "Twitch Subscriber Goal Widget",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "axios": "^1.9.0",
+        "express": "^4.17.1"
+    }
+}

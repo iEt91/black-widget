@@ -1,0 +1,24 @@
+#widget-container {
+    position: relative;
+    width: 1200px;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+}
+
+#walking-person {
+    position: absolute;
+    left: 0;
+    transition: left 0.5s ease;
+}
+
+#progress-text {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    font-size: 20px;
+    font-family: Arial, sans-serif;
+    text-shadow: 2px 2px 4px black;
+}

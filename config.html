@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Configurar Widget</title>
+</head>
+<body>
+    <h1>Configurar Widget de Suscriptores</h1>
+    <form id="config-form">
+        <label>Twitch Client ID: <input type="text" id="client-id" value="gp762nuuoqcoxypju8c569th9wz7q5"></label><br>
+        <label>Twitch Access Token: <input type="text" id="access-token" value="6s1g5z1old5ku6t6i0xg68e6gabmk8"></label><br>
+        <label>Twitch Channel Name: <input type="text" id="channel-name" value="tangov91"></label><br>
+        <label>URL Fondo (1200x200): <input type="text" id="background-url" value="./img2.png"></label><br>
+        <label>URL GIF (330x520): <input type="text" id="gif-url" value="./img1.gif"></label><br>
+        <label>Meta de Suscriptores: <input type="number" id="goal-amount" value="100"></label><br>
+        <label>Tamaño del GIF (ancho en px): <input type="number" id="gif-width" value="165"></label><br>
+        <label>Posición Vertical GIF (px desde abajo): <input type="number" id="gif-bottom" value="0"></label><br>
+        <button type="submit">Generar Widget</button>
+    </form>
+    <script>
+        document.getElementById('config-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const config = {
+                clientId: document.getElementById('client-id').value,
+                accessToken: document.getElementById('access-token').value,
+                channelName: document.getElementById('channel-name').value,
+                backgroundUrl: document.getElementById('background-url').value,
+                gifUrl: document.getElementById('gif-url').value,
+                goalAmount: document.getElementById('goal-amount').value,
+                gifWidth: document.getElementById('gif-width').value,
+                gifBottom: document.getElementById('gif-bottom').value
+            };
+            localStorage.setItem('widgetConfig', JSON.stringify(config));
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
