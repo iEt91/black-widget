@@ -27,9 +27,14 @@
 }
 
 /* Definición de la animación */
-animation: glow 2s infinite ease-in-out;
-@keyframes glow {
-    0% { text-shadow: 2px 2px 4px black; }
-    50% { text-shadow: 0 0 10px white, 2px 2px 4px black; }
-    100% { text-shadow: 2px 2px 4px black; }
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1); /* Aumenta ligeramente el tamaño */
+    }
+    100% {
+        transform: scale(1);
+    }
 }
