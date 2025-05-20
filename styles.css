@@ -20,7 +20,21 @@
     top: 10px;
     left: 10px;
     color: white;
-    font-size: 23px;
+    font-size: 30px; /* Tamaño más grande */
     font-family: Arial, sans-serif;
-    text-shadow: 4px 4px 8px black;
+    text-shadow: 2px 2px 4px black; /* Sombra original */
+    animation: pulse 2s infinite ease-in-out; /* Animación de pulsar */
+}
+
+/* Definición de la animación */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1); /* Aumenta ligeramente el tamaño */
+    }
+    100% {
+        transform: scale(1);
+    }
 }
