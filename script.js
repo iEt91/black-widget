@@ -6,13 +6,14 @@ const config = {
     channelName: urlParams.get('channelName') || 'tangov91',
     backgroundUrl: urlParams.get('background') || './img2.png',
     gifUrl: urlParams.get('gif') || './img1.gif',
+    finalGifUrl: urlParams.get('finalGif') || './img4.gif', // Nuevo parámetro
     goalAmount: parseInt(urlParams.get('goal')) || 238,
-    gifWidth: parseInt(urlParams.get('gifWidth')) || 165,
+    gifWidth: parseInt(urlParams.get('gifWidth')) || 330, // Ancho predeterminado
+    gifHeight: parseInt(urlParams.get('gifHeight')) || 520, // Alto predeterminado
+    finalGifWidth: parseInt(urlParams.get('finalGifWidth')) || 330, // Ancho predeterminado
+    finalGifHeight: parseInt(urlParams.get('finalGifHeight')) || 520, // Alto predeterminado
     gifBottom: parseInt(urlParams.get('gifBottom')) || 0
 };
-
-// Depuración: Mostrar los parámetros recibidos
-console.log('Parámetros recibidos:', Object.fromEntries(urlParams));
 
 // Elementos del DOM
 const widgetContainer = document.getElementById('widget-container');
@@ -22,16 +23,15 @@ const progressText = document.getElementById('progress-text');
 // Aplicar estilos iniciales
 widgetContainer.style.backgroundImage = `url('${config.backgroundUrl}')`;
 walkingPerson.src = config.gifUrl;
-walkingPerson.style.width = `${config.gifWidth}px`; // Ancho configurado
-walkingPerson.style.height = 'auto'; // Respetar proporciones originales
+walkingPerson.style.width = `${config.gifWidth}px`; // Ancho personalizado
+walkingPerson.style.height = `${config.gifHeight}px`; // Alto personalizado
 walkingPerson.style.bottom = `${config.gifBottom}px`;
-console.log(`Dimensiones iniciales de img1.gif: width=${walkingPerson.style.width}, height=${walkingPerson.style.height}`); // Depuración
 
 let GOAL_AMOUNT = parseInt(config.goalAmount) || 238;
 let currentAmount = 0;
 const UPDATE_INTERVAL = 5000;
 const CELEBRATION_DURATION = 2500; // Duración del GIF de celebración (2.5 segundos)
-const TRANSITION_DELAY = 500; // Retraso de 0.5 segundos antes de mostrar celebration.gif
+const TRANSITION_DELAY = 100; // Retraso de 0.1 segundos antes de mostrar celebration.gif
 
 async function fetchSubscribers() {
     try {
@@ -43,7 +43,6 @@ async function fetchSubscribers() {
         // Calcular el porcentaje
         let percentage = (currentAmount / GOAL_AMOUNT) * 100;
         percentage = Math.min(Math.max(percentage, 0), 100); // Limitar entre 0 y 100
-        console.log(`Current Amount: ${currentAmount}, Goal: ${GOAL_AMOUNT}, Percentage: ${percentage}%`);
 
         // Actualizar el texto del progreso
         progressText.innerText = `Progreso: ${percentage.toFixed(0)}%`;
@@ -53,7 +52,6 @@ async function fetchSubscribers() {
         const gifWidth = walkingPerson.offsetWidth;
         const maxPosition = containerWidth - gifWidth;
         const leftPosition = (percentage / 100) * maxPosition;
-        console.log(`Container Width: ${containerWidth}, GIF Width: ${gifWidth}, Max Position: ${maxPosition}, Left Position: ${leftPosition}`);
         walkingPerson.style.left = `${leftPosition}px`;
 
         // Verificar si se alcanzó el 100%
@@ -62,7 +60,6 @@ async function fetchSubscribers() {
             startCelebration();
         }
     } catch (error) {
-        console.error('Error:', error);
         progressText.innerText = 'Error al cargar datos';
     }
 }
@@ -72,50 +69,33 @@ function startCelebration() {
     clearInterval(updateInterval);
 
     // Paso 1: Ocultar fondo y GIF inicial
-    console.log('Ocultando img2.png y img1.gif');
     widgetContainer.style.backgroundImage = 'none';
     widgetContainer.style.backgroundColor = 'transparent'; // Fondo transparente
     walkingPerson.style.display = 'none';
 
-    // Paso 2: Esperar 0.5 segundos y mostrar celebration.gif
+    // Paso 2: Esperar 0.1 segundos y mostrar celebration.gif
     setTimeout(() => {
-        console.log('Cargando celebration.gif');
         walkingPerson.src = './celebration.gif';
         walkingPerson.style.width = '1200px'; // Tamaño original
         walkingPerson.style.height = '200px'; // Tamaño original
         walkingPerson.style.left = '0'; // Reiniciar posición
         walkingPerson.style.bottom = '0'; // Alinear en la base
         walkingPerson.style.display = 'block'; // Mostrar GIF
-
-        // Manejar error de carga del GIF
-        walkingPerson.onerror = () => {
-            console.error('Error: No se pudo cargar celebration.gif');
-            progressText.innerText = 'Error: GIF de celebración no encontrado';
-        };
     }, TRANSITION_DELAY);
 
     // Paso 3: Esperar la duración del GIF de celebración (2.5 segundos) y mostrar nuevo fondo y GIF
     setTimeout(() => {
         // Ocultar GIF de celebración para evitar parpadeo
-        console.log('Ocultando celebration.gif');
         walkingPerson.style.display = 'none';
 
         // Mostrar nuevo fondo y GIF
-        console.log('Cargando img3.png y img4.gif');
         widgetContainer.style.backgroundImage = `url('./img3.png')`;
         widgetContainer.style.backgroundColor = '#333'; // Restaurar fondo de respaldo
-        walkingPerson.src = './img4.gif';
-        walkingPerson.style.width = `${config.gifWidth}px`; // Restaurar ancho configurado
-        walkingPerson.style.height = 'auto'; // Respetar proporciones
+        walkingPerson.src = config.finalGifUrl;
+        walkingPerson.style.width = `${config.finalGifWidth}px`; // Ancho personalizado
+        walkingPerson.style.height = `${config.finalGifHeight}px`; // Alto personalizado
         walkingPerson.style.bottom = `${config.gifBottom}px`; // Restaurar posición vertical
         walkingPerson.style.display = 'block'; // Mostrar nuevo GIF
-        console.log(`Dimensiones de img4.gif: width=${walkingPerson.style.width}, height=${walkingPerson.style.height}`);
-
-        // Manejar error de carga del nuevo GIF
-        walkingPerson.onerror = () => {
-            console.error('Error: No se pudo cargar img4.gif');
-            progressText.innerText = 'Error: GIF de reinicio no encontrado';
-        };
 
         // Reiniciar el porcentaje y establecer la nueva meta
         currentAmount = 0; // Reiniciar el conteo
