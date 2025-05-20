@@ -5,6 +5,8 @@
     background-size: cover;
     background-position: center;
     overflow: hidden;
+    opacity: 1; /* Opacidad inicial */
+    transition: opacity 1s ease; /* Transición suave para el fade */
 }
 
 #walking-person {
