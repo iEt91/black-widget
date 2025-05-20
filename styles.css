@@ -10,8 +10,9 @@
 
 #walking-person {
     position: absolute;
-    left: 0;
-    transition: left 0.5s ease;
+    bottom: 0; /* Alinear la base del GIF con la base del contenedor */
+    left: 0; /* Iniciar en el borde izquierdo */
+    transition: left 0.5s ease; /* Movimiento suave solo en el eje horizontal */
 }
 
 #progress-text {

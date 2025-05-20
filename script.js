@@ -25,7 +25,7 @@ widgetContainer.style.backgroundImage = `url('${config.backgroundUrl}')`;
 walkingPerson.src = config.gifUrl;
 walkingPerson.style.width = `${config.gifWidth}px`;
 walkingPerson.style.height = `${config.gifHeight}px`;
-walkingPerson.style.bottom = `${config.gifBottom}px`;
+// No necesitamos establecer bottom aquí porque está en CSS (bottom: 0)
 
 // Manejar errores de carga de imágenes
 walkingPerson.onerror = () => {
@@ -55,10 +55,10 @@ async function fetchSubscribers() {
         // Actualizar el texto del progreso
         progressText.innerText = `Progreso: ${percentage.toFixed(0)}%`;
 
-        // Mover el GIF
-        const containerWidth = widgetContainer.offsetWidth;
-        const gifWidth = walkingPerson.offsetWidth;
-        const maxPosition = containerWidth - gifWidth;
+        // Mover el GIF según el porcentaje
+        const containerWidth = widgetContainer.offsetWidth; // 1200 px
+        const gifWidth = walkingPerson.offsetWidth; // 330 px
+        const maxPosition = containerWidth - gifWidth; // 1200 - 330 = 870 px
         const leftPosition = (percentage / 100) * maxPosition;
         walkingPerson.style.left = `${leftPosition}px`;
 
@@ -87,7 +87,6 @@ function startCelebration() {
         walkingPerson.style.width = '1200px';
         walkingPerson.style.height = '200px';
         walkingPerson.style.left = '0';
-        walkingPerson.style.bottom = '0';
         walkingPerson.style.display = 'block';
         walkingPerson.onerror = () => {
             progressText.innerText = 'Error: No se pudo cargar celebration.gif';
@@ -105,7 +104,7 @@ function startCelebration() {
         walkingPerson.src = config.finalGifUrl;
         walkingPerson.style.width = `${config.finalGifWidth}px`;
         walkingPerson.style.height = `${config.finalGifHeight}px`;
-        walkingPerson.style.bottom = `${config.gifBottom}px`;
+        walkingPerson.style.left = '0';
         walkingPerson.style.display = 'block';
         walkingPerson.onerror = () => {
             progressText.innerText = 'Error: No se pudo cargar el GIF final';
@@ -115,9 +114,6 @@ function startCelebration() {
         currentAmount = 0;
         GOAL_AMOUNT += 1000;
         progressText.innerText = `Progreso: 0%`;
-
-        // Reiniciar la posición del GIF
-        walkingPerson.style.left = '0';
 
         // Reanudar las actualizaciones
         updateInterval = setInterval(fetchSubscribers, UPDATE_INTERVAL);

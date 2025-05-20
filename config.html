@@ -24,7 +24,7 @@
     <p id="widget-url"></p>
     <script>
         document.getElementById('config-form').addEventListener('submit', (e) => {
-            e.preventDefault(); // Evitar recarga de la página
+            e.preventDefault();
             const clientId = document.getElementById('client-id').value;
             const accessToken = document.getElementById('access-token').value;
             const channelName = document.getElementById('channel-name').value;
