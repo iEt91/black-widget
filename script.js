@@ -29,7 +29,7 @@ walkingPerson.style.bottom = `${config.gifBottom}px`;
 let GOAL_AMOUNT = parseInt(config.goalAmount) || 238;
 let currentAmount = 0;
 const UPDATE_INTERVAL = 5000;
-const CELEBRATION_DURATION = 5000; // Duración del GIF de celebración en milisegundos (5 segundos)
+const CELEBRATION_DURATION = 3000; // Duración del GIF de celebración en milisegundos (3 segundos)
 
 async function fetchSubscribers() {
     try {
@@ -69,10 +69,13 @@ function startCelebration() {
     // Desactivar actualizaciones automáticas durante la celebración
     clearInterval(updateInterval);
 
-    // Cambiar al GIF de celebración
-    console.log('Cargando celebration.gif'); // Depuración
+    // Cambiar al GIF de celebración con tamaño original (1200x200 px)
+    console.log('Cargando celebration.gif');
     walkingPerson.src = './celebration.gif';
-    walkingPerson.style.left = '0'; // Reiniciar posición para el GIF de celebración
+    walkingPerson.style.width = '1200px'; // Tamaño original
+    walkingPerson.style.height = '200px'; // Tamaño original
+    walkingPerson.style.left = '0'; // Reiniciar posición
+    walkingPerson.style.bottom = '0'; // Asegurar que esté en la base
 
     // Manejar error de carga del GIF
     walkingPerson.onerror = () => {
@@ -80,13 +83,16 @@ function startCelebration() {
         progressText.innerText = 'Error: GIF de celebración no encontrado';
     };
 
-    // Esperar la duración del GIF de celebración
+    // Esperar la duración del GIF de celebración (3 segundos)
     setTimeout(() => {
         // Cambiar al nuevo fondo
         widgetContainer.style.backgroundImage = `url('./img3.png')`;
 
-        // Cambiar al nuevo GIF de la persona corriendo
+        // Restaurar el GIF y su tamaño original
         walkingPerson.src = './img4.gif';
+        walkingPerson.style.width = `${config.gifWidth}px`; // Restaurar tamaño configurado
+        walkingPerson.style.height = `${config.gifWidth * (520/330)}px`; // Restaurar altura
+        walkingPerson.style.bottom = `${config.gifBottom}px`; // Restaurar posición vertical
         walkingPerson.onerror = () => {
             console.error('Error: No se pudo cargar img4.gif');
             progressText.innerText = 'Error: GIF de reinicio no encontrado';
