@@ -6,12 +6,12 @@ const config = {
     channelName: urlParams.get('channelName') || 'tangov91',
     backgroundUrl: urlParams.get('background') || './img2.png',
     gifUrl: urlParams.get('gif') || './img1.gif',
-    finalGifUrl: urlParams.get('finalGif') || './img4.gif', // Nuevo parámetro
+    finalGifUrl: urlParams.get('finalGif') || './img4.gif',
     goalAmount: parseInt(urlParams.get('goal')) || 238,
-    gifWidth: parseInt(urlParams.get('gifWidth')) || 330, // Ancho predeterminado
-    gifHeight: parseInt(urlParams.get('gifHeight')) || 520, // Alto predeterminado
-    finalGifWidth: parseInt(urlParams.get('finalGifWidth')) || 330, // Ancho predeterminado
-    finalGifHeight: parseInt(urlParams.get('finalGifHeight')) || 520, // Alto predeterminado
+    gifWidth: parseInt(urlParams.get('gifWidth')) || 330,
+    gifHeight: parseInt(urlParams.get('gifHeight')) || 520,
+    finalGifWidth: parseInt(urlParams.get('finalGifWidth')) || 330,
+    finalGifHeight: parseInt(urlParams.get('finalGifHeight')) || 520,
     gifBottom: parseInt(urlParams.get('gifBottom')) || 0
 };
 
@@ -23,15 +23,15 @@ const progressText = document.getElementById('progress-text');
 // Aplicar estilos iniciales
 widgetContainer.style.backgroundImage = `url('${config.backgroundUrl}')`;
 walkingPerson.src = config.gifUrl;
-walkingPerson.style.width = `${config.gifWidth}px`; // Ancho personalizado
-walkingPerson.style.height = `${config.gifHeight}px`; // Alto personalizado
+walkingPerson.style.width = `${config.gifWidth}px`;
+walkingPerson.style.height = `${config.gifHeight}px`;
 walkingPerson.style.bottom = `${config.gifBottom}px`;
 
 let GOAL_AMOUNT = parseInt(config.goalAmount) || 238;
 let currentAmount = 0;
 const UPDATE_INTERVAL = 5000;
 const CELEBRATION_DURATION = 2500; // Duración del GIF de celebración (2.5 segundos)
-const TRANSITION_DELAY = 100; // Retraso de 0.1 segundos antes de mostrar celebration.gif
+const TRANSITION_DELAY = 100; // Retraso de 0.1 segundos
 
 async function fetchSubscribers() {
     try {
@@ -42,7 +42,7 @@ async function fetchSubscribers() {
 
         // Calcular el porcentaje
         let percentage = (currentAmount / GOAL_AMOUNT) * 100;
-        percentage = Math.min(Math.max(percentage, 0), 100); // Limitar entre 0 y 100
+        percentage = Math.min(Math.max(percentage, 0), 100);
 
         // Actualizar el texto del progreso
         progressText.innerText = `Progreso: ${percentage.toFixed(0)}%`;
@@ -65,41 +65,41 @@ async function fetchSubscribers() {
 }
 
 function startCelebration() {
-    // Desactivar actualizaciones automáticas durante la celebración
+    // Desactivar actualizaciones automáticas
     clearInterval(updateInterval);
 
     // Paso 1: Ocultar fondo y GIF inicial
     widgetContainer.style.backgroundImage = 'none';
-    widgetContainer.style.backgroundColor = 'transparent'; // Fondo transparente
+    widgetContainer.style.backgroundColor = 'transparent';
     walkingPerson.style.display = 'none';
 
     // Paso 2: Esperar 0.1 segundos y mostrar celebration.gif
     setTimeout(() => {
         walkingPerson.src = './celebration.gif';
-        walkingPerson.style.width = '1200px'; // Tamaño original
-        walkingPerson.style.height = '200px'; // Tamaño original
-        walkingPerson.style.left = '0'; // Reiniciar posición
-        walkingPerson.style.bottom = '0'; // Alinear en la base
-        walkingPerson.style.display = 'block'; // Mostrar GIF
+        walkingPerson.style.width = '1200px';
+        walkingPerson.style.height = '200px';
+        walkingPerson.style.left = '0';
+        walkingPerson.style.bottom = '0';
+        walkingPerson.style.display = 'block';
     }, TRANSITION_DELAY);
 
-    // Paso 3: Esperar la duración del GIF de celebración (2.5 segundos) y mostrar nuevo fondo y GIF
+    // Paso 3: Esperar la duración del GIF de celebración y mostrar nuevo fondo y GIF
     setTimeout(() => {
-        // Ocultar GIF de celebración para evitar parpadeo
+        // Ocultar GIF de celebración
         walkingPerson.style.display = 'none';
 
         // Mostrar nuevo fondo y GIF
         widgetContainer.style.backgroundImage = `url('./img3.png')`;
-        widgetContainer.style.backgroundColor = '#333'; // Restaurar fondo de respaldo
+        widgetContainer.style.backgroundColor = '#333';
         walkingPerson.src = config.finalGifUrl;
-        walkingPerson.style.width = `${config.finalGifWidth}px`; // Ancho personalizado
-        walkingPerson.style.height = `${config.finalGifHeight}px`; // Alto personalizado
-        walkingPerson.style.bottom = `${config.gifBottom}px`; // Restaurar posición vertical
-        walkingPerson.style.display = 'block'; // Mostrar nuevo GIF
+        walkingPerson.style.width = `${config.finalGifWidth}px`;
+        walkingPerson.style.height = `${config.finalGifHeight}px`;
+        walkingPerson.style.bottom = `${config.gifBottom}px`;
+        walkingPerson.style.display = 'block';
 
         // Reiniciar el porcentaje y establecer la nueva meta
-        currentAmount = 0; // Reiniciar el conteo
-        GOAL_AMOUNT += 1000; // Nueva meta: +1000 suscriptores
+        currentAmount = 0;
+        GOAL_AMOUNT += 1000;
         progressText.innerText = `Progreso: 0%`;
 
         // Reiniciar la posición del GIF
@@ -107,7 +107,7 @@ function startCelebration() {
 
         // Reanudar las actualizaciones
         updateInterval = setInterval(fetchSubscribers, UPDATE_INTERVAL);
-        fetchSubscribers(); // Actualizar inmediatamente
+        fetchSubscribers();
     }, TRANSITION_DELAY + CELEBRATION_DURATION);
 }
 
