@@ -27,6 +27,14 @@ walkingPerson.style.width = `${config.gifWidth}px`;
 walkingPerson.style.height = `${config.gifHeight}px`;
 walkingPerson.style.bottom = `${config.gifBottom}px`;
 
+// Manejar errores de carga de imágenes
+walkingPerson.onerror = () => {
+    progressText.innerText = 'Error: No se pudo cargar el GIF';
+};
+
+// Iniciar con mensaje de carga
+progressText.innerText = 'Cargando datos...';
+
 let GOAL_AMOUNT = parseInt(config.goalAmount) || 238;
 let currentAmount = 0;
 const UPDATE_INTERVAL = 5000;
@@ -81,6 +89,9 @@ function startCelebration() {
         walkingPerson.style.left = '0';
         walkingPerson.style.bottom = '0';
         walkingPerson.style.display = 'block';
+        walkingPerson.onerror = () => {
+            progressText.innerText = 'Error: No se pudo cargar celebration.gif';
+        };
     }, TRANSITION_DELAY);
 
     // Paso 3: Esperar la duración del GIF de celebración y mostrar nuevo fondo y GIF
@@ -96,6 +107,9 @@ function startCelebration() {
         walkingPerson.style.height = `${config.finalGifHeight}px`;
         walkingPerson.style.bottom = `${config.gifBottom}px`;
         walkingPerson.style.display = 'block';
+        walkingPerson.onerror = () => {
+            progressText.innerText = 'Error: No se pudo cargar el GIF final';
+        };
 
         // Reiniciar el porcentaje y establecer la nueva meta
         currentAmount = 0;

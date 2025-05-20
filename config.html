@@ -10,29 +10,36 @@
         <label>Twitch Client ID: <input type="text" id="client-id" value="gp762nuuoqcoxypju8c569th9wz7q5"></label><br>
         <label>Twitch Access Token: <input type="text" id="access-token" value="6s1g5z1old5ku6t6i0xg68e6gabmk8"></label><br>
         <label>Twitch Channel Name: <input type="text" id="channel-name" value="tangov91"></label><br>
-        <label>URL Fondo (1200x200): <input type="text" id="background-url" value="./img2.png"></label><br>
-        <label>URL GIF (330x520): <input type="text" id="gif-url" value="./img1.gif"></label><br>
+        <label>URL Fondo Inicial (1200x200): <input type="text" id="background-url" value="./img2.png"></label><br>
+        <label>URL GIF Inicial (330x520): <input type="text" id="gif-url" value="./img1.gif"></label><br>
+        <label>Ancho GIF Inicial (px): <input type="number" id="gif-width" value="330"></label><br>
+        <label>Alto GIF Inicial (px): <input type="number" id="gif-height" value="520"></label><br>
+        <label>URL GIF Final (330x520): <input type="text" id="final-gif-url" value="./img4.gif"></label><br>
+        <label>Ancho GIF Final (px): <input type="number" id="final-gif-width" value="330"></label><br>
+        <label>Alto GIF Final (px): <input type="number" id="final-gif-height" value="520"></label><br>
         <label>Meta de Suscriptores: <input type="number" id="goal-amount" value="100"></label><br>
-        <label>Tamaño del GIF (ancho en px): <input type="number" id="gif-width" value="165"></label><br>
         <label>Posición Vertical GIF (px desde abajo): <input type="number" id="gif-bottom" value="0"></label><br>
         <button type="submit">Generar Widget</button>
     </form>
     <p id="widget-url"></p>
     <script>
         document.getElementById('config-form').addEventListener('submit', (e) => {
-            e.preventDefault();
+            e.preventDefault(); // Evitar recarga de la página
             const clientId = document.getElementById('client-id').value;
             const accessToken = document.getElementById('access-token').value;
             const channelName = document.getElementById('channel-name').value;
             const background = document.getElementById('background-url').value;
             const gif = document.getElementById('gif-url').value;
+            const finalGif = document.getElementById('final-gif-url').value;
             const goal = document.getElementById('goal-amount').value;
             const gifWidth = document.getElementById('gif-width').value;
+            const gifHeight = document.getElementById('gif-height').value;
+            const finalGifWidth = document.getElementById('final-gif-width').value;
+            const finalGifHeight = document.getElementById('final-gif-height').value;
             const gifBottom = document.getElementById('gif-bottom').value;
 
-            const url = `${window.location.origin}/index.html?clientId=${encodeURIComponent(clientId)}&accessToken=${encodeURIComponent(accessToken)}&channelName=${encodeURIComponent(channelName)}&background=${encodeURIComponent(background)}&gif=${encodeURIComponent(gif)}&goal=${encodeURIComponent(goal)}&gifWidth=${encodeURIComponent(gifWidth)}&gifBottom=${encodeURIComponent(gifBottom)}`;
+            const url = `${window.location.origin}/index.html?clientId=${encodeURIComponent(clientId)}&accessToken=${encodeURIComponent(accessToken)}&channelName=${encodeURIComponent(channelName)}&background=${encodeURIComponent(background)}&gif=${encodeURIComponent(gif)}&finalGif=${encodeURIComponent(finalGif)}&goal=${encodeURIComponent(goal)}&gifWidth=${encodeURIComponent(gifWidth)}&gifHeight=${encodeURIComponent(gifHeight)}&finalGifWidth=${encodeURIComponent(finalGifWidth)}&finalGifHeight=${encodeURIComponent(finalGifHeight)}&gifBottom=${encodeURIComponent(gifBottom)}`;
             document.getElementById('widget-url').innerHTML = `Usa esta URL en OBS: <a href="${url}" target="_blank">${url}</a>`;
-            window.location.href = url;
         });
     </script>
 </body>
