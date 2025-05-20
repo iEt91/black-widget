@@ -73,8 +73,15 @@ function startCelebration() {
     widgetContainer.style.opacity = '0';
 
     // Cambiar al GIF de celebración
+    console.log('Cargando celebration.gif'); // Depuración
     walkingPerson.src = './celebration.gif';
     walkingPerson.style.left = '0'; // Reiniciar posición para el GIF de celebración
+
+    // Manejar error de carga del GIF
+    walkingPerson.onerror = () => {
+        console.error('Error: No se pudo cargar celebration.gif');
+        progressText.innerText = 'Error: GIF de celebración no encontrado';
+    };
 
     // Esperar la duración del GIF de celebración
     setTimeout(() => {
@@ -84,6 +91,10 @@ function startCelebration() {
 
         // Cambiar al nuevo GIF de la persona corriendo
         walkingPerson.src = './img4.gif';
+        walkingPerson.onerror = () => {
+            console.error('Error: No se pudo cargar img4.gif');
+            progressText.innerText = 'Error: GIF de reinicio no encontrado';
+        };
 
         // Reiniciar el porcentaje y establecer la nueva meta
         currentAmount = 0; // Reiniciar el conteo
