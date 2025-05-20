@@ -6,8 +6,6 @@
     background-position: center;
     background-color: #333; /* Fondo de respaldo para evitar blanco */
     overflow: hidden;
-    opacity: 1; /* Opacidad inicial */
-    transition: opacity 1s ease; /* Transición suave para el fade */
 }
 
 #walking-person {
