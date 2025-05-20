@@ -25,6 +25,7 @@ walkingPerson.src = config.gifUrl;
 walkingPerson.style.width = `${config.gifWidth}px`; // Ancho configurado
 walkingPerson.style.height = 'auto'; // Respetar proporciones originales
 walkingPerson.style.bottom = `${config.gifBottom}px`;
+console.log(`Dimensiones iniciales de img1.gif: width=${walkingPerson.style.width}, height=${walkingPerson.style.height}`); // Depuración
 
 let GOAL_AMOUNT = parseInt(config.goalAmount) || 238;
 let currentAmount = 0;
@@ -71,24 +72,23 @@ function startCelebration() {
 
     // Ocultar fondo y GIF inicial
     widgetContainer.style.backgroundImage = 'none';
+    widgetContainer.style.backgroundColor = 'transparent'; // Evitar fondo gris
     walkingPerson.style.display = 'none';
 
-    // Mostrar GIF de celebración (1200x200 px)
-    setTimeout(() => {
-        console.log('Cargando celebration.gif');
-        walkingPerson.src = './celebration.gif';
-        walkingPerson.style.width = '1200px'; // Tamaño original
-        walkingPerson.style.height = '200px'; // Tamaño original
-        walkingPerson.style.left = '0'; // Reiniciar posición
-        walkingPerson.style.bottom = '0'; // Alinear en la base
-        walkingPerson.style.display = 'block'; // Mostrar GIF
+    // Mostrar GIF de celebración
+    walkingPerson.src = './celebration.gif';
+    walkingPerson.style.width = '1200px'; // Tamaño original
+    walkingPerson.style.height = '200px'; // Tamaño original
+    walkingPerson.style.left = '0'; // Reiniciar posición
+    walkingPerson.style.bottom = '0'; // Alinear en la base
+    walkingPerson.style.display = 'block'; // Mostrar GIF
+    console.log('Cargando celebration.gif, dimensiones: width=1200px, height=200px');
 
-        // Manejar error de carga del GIF
-        walkingPerson.onerror = () => {
-            console.error('Error: No se pudo cargar celebration.gif');
-            progressText.innerText = 'Error: GIF de celebración no encontrado';
-        };
-    }, 0);
+    // Manejar error de carga del GIF
+    walkingPerson.onerror = () => {
+        console.error('Error: No se pudo cargar celebration.gif');
+        progressText.innerText = 'Error: GIF de celebración no encontrado';
+    };
 
     // Esperar la duración del GIF de celebración (2.5 segundos)
     setTimeout(() => {
@@ -97,11 +97,13 @@ function startCelebration() {
 
         // Mostrar nuevo fondo y GIF
         widgetContainer.style.backgroundImage = `url('./img3.png')`;
+        widgetContainer.style.backgroundColor = '#333'; // Restaurar fondo de respaldo
         walkingPerson.src = './img4.gif';
         walkingPerson.style.width = `${config.gifWidth}px`; // Restaurar ancho configurado
         walkingPerson.style.height = 'auto'; // Respetar proporciones
         walkingPerson.style.bottom = `${config.gifBottom}px`; // Restaurar posición vertical
         walkingPerson.style.display = 'block'; // Mostrar nuevo GIF
+        console.log(`Dimensiones de img4.gif: width=${walkingPerson.style.width}, height=${walkingPerson.style.height}`);
 
         // Manejar error de carga del nuevo GIF
         walkingPerson.onerror = () => {
