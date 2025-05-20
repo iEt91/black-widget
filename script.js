@@ -69,9 +69,6 @@ function startCelebration() {
     // Desactivar actualizaciones automáticas durante la celebración
     clearInterval(updateInterval);
 
-    // Fade out del fondo actual
-    widgetContainer.style.opacity = '0';
-
     // Cambiar al GIF de celebración
     console.log('Cargando celebration.gif'); // Depuración
     walkingPerson.src = './celebration.gif';
@@ -85,9 +82,8 @@ function startCelebration() {
 
     // Esperar la duración del GIF de celebración
     setTimeout(() => {
-        // Fade in del nuevo fondo
+        // Cambiar al nuevo fondo
         widgetContainer.style.backgroundImage = `url('./img3.png')`;
-        widgetContainer.style.opacity = '1';
 
         // Cambiar al nuevo GIF de la persona corriendo
         walkingPerson.src = './img4.gif';
