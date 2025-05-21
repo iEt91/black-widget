@@ -20,12 +20,22 @@ const widgetContainer = document.getElementById('widget-container');
 const walkingPerson = document.getElementById('walking-person');
 const progressText = document.getElementById('progress-text');
 
-// Aplicar estilos iniciales
+// Calcular factor de escala para ajustar la altura del GIF al contenedor (200px)
+const containerHeight = 200; // Altura del contenedor
+const scaleFactor = containerHeight / config.gifHeight; // 200 / 520 ≈ 0.3846
+const scaledWidth = config.gifWidth * scaleFactor; // 330 * 0.3846 ≈ 126.92 px
+const scaledHeight = config.gifHeight * scaleFactor; // 200 px
+
+// Calcular factor de escala para el GIF final (img4.gif)
+const finalScaleFactor = containerHeight / config.finalGifHeight; // 200 / 520 ≈ 0.3846
+const finalScaledWidth = config.finalGifWidth * finalScaleFactor; // 330 * 0.3846 ≈ 126.92 px
+const finalScaledHeight = config.finalGifHeight * finalScaleFactor; // 200 px
+
+// Aplicar estilos iniciales con tamaño escalado
 widgetContainer.style.backgroundImage = `url('${config.backgroundUrl}')`;
 walkingPerson.src = config.gifUrl;
-walkingPerson.style.width = `${config.gifWidth}px`;
-walkingPerson.style.height = `${config.gifHeight}px`;
-// No necesitamos establecer bottom aquí porque está en CSS (bottom: 0)
+walkingPerson.style.width = `${scaledWidth}px`; // Ajustar ancho escalado
+walkingPerson.style.height = `${scaledHeight}px`; // Ajustar altura escalada (200px)
 
 // Manejar errores de carga de imágenes
 walkingPerson.onerror = () => {
@@ -57,8 +67,8 @@ async function fetchSubscribers() {
 
         // Mover el GIF según el porcentaje
         const containerWidth = widgetContainer.offsetWidth; // 1200 px
-        const gifWidth = walkingPerson.offsetWidth; // 330 px
-        const maxPosition = containerWidth - gifWidth; // 1200 - 330 = 870 px
+        const gifWidth = walkingPerson.offsetWidth; // ≈ 126.92 px después de escalar
+        const maxPosition = containerWidth - gifWidth; // 1200 - 126.92 ≈ 1073.08 px
         const leftPosition = (percentage / 100) * maxPosition;
         walkingPerson.style.left = `${leftPosition}px`;
 
@@ -102,8 +112,8 @@ function startCelebration() {
         widgetContainer.style.backgroundImage = `url('./img3.png')`;
         widgetContainer.style.backgroundColor = '#333';
         walkingPerson.src = config.finalGifUrl;
-        walkingPerson.style.width = `${config.finalGifWidth}px`;
-        walkingPerson.style.height = `${config.finalGifHeight}px`;
+        walkingPerson.style.width = `${finalScaledWidth}px`; // Ajustar ancho escalado
+        walkingPerson.style.height = `${finalScaledHeight}px`; // Ajustar altura escalada
         walkingPerson.style.left = '0';
         walkingPerson.style.display = 'block';
         walkingPerson.onerror = () => {
