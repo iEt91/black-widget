@@ -58,15 +58,25 @@ walkingPerson.onerror = () => {
 progressText.innerText = 'Cargando datos...';
 
 let currentAmount = 0;
-const UPDATE_INTERVAL = 5000;
+let isSimulating = false; // Indica si el usuario está simulando con el slider
+let simulationTimeout = null; // Temporizador para desactivar la simulación
+const SIMULATION_TIMEOUT_DURATION = 10000; // 10 segundos sin interacción
+const UPDATE_INTERVAL = 5000; // Intervalo de actualización de Twitch
 const CELEBRATION_DURATION = 2500; // Duración del GIF de celebración (2.5 segundos)
 const TRANSITION_DELAY = 300; // Retraso de 0.3 segundos (antes y después de celebration.gif)
 
 // Actualizar el widget según el valor del slider
 subSlider.addEventListener('input', () => {
+    isSimulating = true; // Activar modo de simulación
     currentAmount = parseInt(subSlider.value);
     subValue.textContent = currentAmount;
     updateProgress();
+
+    // Reiniciar el temporizador de simulación
+    clearTimeout(simulationTimeout);
+    simulationTimeout = setTimeout(() => {
+        isSimulating = false; // Desactivar modo de simulación después de inactividad
+    }, SIMULATION_TIMEOUT_DURATION);
 });
 
 // Función para actualizar el progreso
@@ -93,25 +103,28 @@ function updateProgress() {
 }
 
 async function fetchSubscribers() {
-    try {
-        const response = await fetch(`/subscribers?clientId=${config.clientId}&accessToken=${config.accessToken}&channelName=${config.channelName}`);
-        const data = await response.json();
-        if (data.error) throw new Error(data.error);
-        currentAmount = parseInt(data.total) || 0;
+    // Solo actualizar si no estamos en modo de simulación
+    if (!isSimulating) {
+        try {
+            const response = await fetch(`/subscribers?clientId=${config.clientId}&accessToken=${config.accessToken}&channelName=${config.channelName}`);
+            const data = await response.json();
+            if (data.error) throw new Error(data.error);
+            currentAmount = parseInt(data.total) || 0;
 
-        // Actualizar el slider y el widget
-        subSlider.value = currentAmount;
-        subValue.textContent = currentAmount;
-        updateProgress();
-    } catch (error) {
-        progressText.innerText = 'Error al cargar datos';
+            // Actualizar el slider y el widget
+            subSlider.value = currentAmount;
+            subValue.textContent = currentAmount;
+            updateProgress();
+        } catch (error) {
+            progressText.innerText = 'Error al cargar datos';
+        }
     }
 }
 
 function startCelebration() {
-    // Desactivar actualizaciones automáticas
+    // Desactivar actualizaciones automáticas y slider
     clearInterval(updateInterval);
-    subSlider.disabled = true; // Desactivar slider durante la transición
+    subSlider.disabled = true;
 
     // Paso 1: Ocultar fondo y GIF inicial
     widgetContainer.style.backgroundImage = 'none';
@@ -156,11 +169,12 @@ function startCelebration() {
             // Reiniciar el porcentaje y establecer la nueva meta
             currentAmount = 0;
             GOAL_AMOUNT += 1000;
-            subSlider.max = GOAL_AMOUNT; // Actualizar máximo del slider
+            subSlider.max = GOAL_AMOUNT;
             subSlider.value = 0;
             subValue.textContent = 0;
             progressText.innerText = `Progreso: 0%`;
-            subSlider.disabled = false; // Reactivar slider
+            subSlider.disabled = false;
+            isSimulating = false; // Desactivar modo de simulación
 
             // Reanudar las actualizaciones
             updateInterval = setInterval(fetchSubscribers, UPDATE_INTERVAL);
