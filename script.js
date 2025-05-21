@@ -16,6 +16,8 @@ const config = {
 const widgetContainer = document.getElementById('widget-container');
 const walkingPerson = document.getElementById('walking-person');
 const progressText = document.getElementById('progress-text');
+const subSlider = document.getElementById('sub-slider');
+const subValue = document.getElementById('sub-value');
 
 // Dimensiones originales de los GIFs (fijas)
 const originalGifWidth = 330;
@@ -34,6 +36,12 @@ const finalScaleFactor = containerHeight / originalFinalGifHeight; // 200 / 520 
 const finalScaledWidth = originalFinalGifWidth * finalScaleFactor; // 330 * 0.3846 ≈ 126.92 px
 const finalScaledHeight = containerHeight; // 200 px
 
+// Configurar el slider
+let GOAL_AMOUNT = parseInt(config.goalAmount) || 238;
+subSlider.max = GOAL_AMOUNT; // Máximo del slider es la meta
+subSlider.value = 0; // Valor inicial
+subValue.textContent = subSlider.value; // Mostrar valor inicial
+
 // Aplicar estilos iniciales con tamaño escalado y posición vertical personalizada
 widgetContainer.style.backgroundImage = `url('${config.backgroundUrl}')`;
 walkingPerson.src = config.gifUrl;
@@ -49,11 +57,40 @@ walkingPerson.onerror = () => {
 // Iniciar con mensaje de carga
 progressText.innerText = 'Cargando datos...';
 
-let GOAL_AMOUNT = parseInt(config.goalAmount) || 238;
 let currentAmount = 0;
 const UPDATE_INTERVAL = 5000;
 const CELEBRATION_DURATION = 2500; // Duración del GIF de celebración (2.5 segundos)
 const TRANSITION_DELAY = 300; // Retraso de 0.3 segundos (antes y después de celebration.gif)
+
+// Actualizar el widget según el valor del slider
+subSlider.addEventListener('input', () => {
+    currentAmount = parseInt(subSlider.value);
+    subValue.textContent = currentAmount;
+    updateProgress();
+});
+
+// Función para actualizar el progreso
+function updateProgress() {
+    // Calcular el porcentaje
+    let percentage = (currentAmount / GOAL_AMOUNT) * 100;
+    percentage = Math.min(Math.max(percentage, 0), 100);
+
+    // Actualizar el texto del progreso
+    progressText.innerText = `Progreso: ${percentage.toFixed(0)}%`;
+
+    // Mover el GIF según el porcentaje
+    const containerWidth = widgetContainer.offsetWidth; // 1200 px
+    const gifWidth = walkingPerson.offsetWidth; // ≈ 126.92 px después de escalar
+    const maxPosition = containerWidth - gifWidth; // 1200 - 126.92 ≈ 1073.08 px
+    const leftPosition = (percentage / 100) * maxPosition;
+    walkingPerson.style.left = `${leftPosition}px`;
+
+    // Verificar si se alcanzó el 100%
+    if (percentage === 100) {
+        // Iniciar la secuencia de celebración
+        startCelebration();
+    }
+}
 
 async function fetchSubscribers() {
     try {
@@ -62,25 +99,10 @@ async function fetchSubscribers() {
         if (data.error) throw new Error(data.error);
         currentAmount = parseInt(data.total) || 0;
 
-        // Calcular el porcentaje
-        let percentage = (currentAmount / GOAL_AMOUNT) * 100;
-        percentage = Math.min(Math.max(percentage, 0), 100);
-
-        // Actualizar el texto del progreso
-        progressText.innerText = `Progreso: ${percentage.toFixed(0)}%`;
-
-        // Mover el GIF según el porcentaje
-        const containerWidth = widgetContainer.offsetWidth; // 1200 px
-        const gifWidth = walkingPerson.offsetWidth; // ≈ 126.92 px después de escalar
-        const maxPosition = containerWidth - gifWidth; // 1200 - 126.92 ≈ 1073.08 px
-        const leftPosition = (percentage / 100) * maxPosition;
-        walkingPerson.style.left = `${leftPosition}px`;
-
-        // Verificar si se alcanzó el 100%
-        if (percentage === 100) {
-            // Iniciar la secuencia de celebración
-            startCelebration();
-        }
+        // Actualizar el slider y el widget
+        subSlider.value = currentAmount;
+        subValue.textContent = currentAmount;
+        updateProgress();
     } catch (error) {
         progressText.innerText = 'Error al cargar datos';
     }
@@ -89,6 +111,7 @@ async function fetchSubscribers() {
 function startCelebration() {
     // Desactivar actualizaciones automáticas
     clearInterval(updateInterval);
+    subSlider.disabled = true; // Desactivar slider durante la transición
 
     // Paso 1: Ocultar fondo y GIF inicial
     widgetContainer.style.backgroundImage = 'none';
@@ -133,7 +156,11 @@ function startCelebration() {
             // Reiniciar el porcentaje y establecer la nueva meta
             currentAmount = 0;
             GOAL_AMOUNT += 1000;
+            subSlider.max = GOAL_AMOUNT; // Actualizar máximo del slider
+            subSlider.value = 0;
+            subValue.textContent = 0;
             progressText.innerText = `Progreso: 0%`;
+            subSlider.disabled = false; // Reactivar slider
 
             // Reanudar las actualizaciones
             updateInterval = setInterval(fetchSubscribers, UPDATE_INTERVAL);

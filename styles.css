@@ -1,3 +1,11 @@
+/* Contenedor principal para alinear widget y slider */
+.widget-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espacio entre el widget y el slider */
+}
+
+/* Contenedor del widget */
 #widget-container {
     position: relative;
     width: 1200px;
@@ -6,6 +14,14 @@
     background-position: center;
     background-color: #333; /* Fondo de respaldo para evitar blanco */
     overflow: hidden;
+}
+
+/* Contenedor del slider */
+.slider-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
 #walking-person {
@@ -18,12 +34,52 @@
 #progress-text {
     position: absolute;
     top: 10px;
-    left: 20px;
+    left: 10px;
     color: white;
     font-size: 30px; /* Tamaño más grande */
     font-family: Arial, sans-serif;
     text-shadow: 2px 2px 4px black; /* Sombra original */
     animation: pulse 2s infinite ease-in-out; /* Animación de pulsar */
+}
+
+/* Estilos del slider */
+#sub-slider {
+    -webkit-appearance: slider-vertical; /* Orientación vertical */
+    writing-mode: bt-lr; /* Para navegadores que no soportan -webkit-appearance */
+    width: 10px;
+    height: 200px; /* Igual a la altura del widget */
+    background: #ddd;
+    outline: none;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+#sub-slider:hover {
+    opacity: 1;
+}
+
+#sub-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #4CAF50;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+#sub-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #4CAF50;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+label[for="sub-slider"] {
+    font-family: Arial, sans-serif;
+    color: #333;
+    font-size: 16px;
 }
 
 /* Definición de la animación */
