@@ -8,8 +8,8 @@ const config = {
     gifUrl: urlParams.get('gif') || './img1.gif',
     finalGifUrl: urlParams.get('finalGif') || './img4.gif',
     goalAmount: parseInt(urlParams.get('goal')) || 238,
-    gifBottom: parseInt(urlParams.get('gifBottom')) || 0, // Posición vertical del primer GIF
-    finalGifBottom: parseInt(urlParams.get('finalGifBottom')) || 0 // Posición vertical del segundo GIF
+    gifBottom: parseInt(urlParams.get('gifBottom')) || 0,
+    finalGifBottom: parseInt(urlParams.get('finalGifBottom')) || 0
 };
 
 // Elementos del DOM
@@ -17,14 +17,14 @@ const widgetContainer = document.getElementById('widget-container');
 const walkingPerson = document.getElementById('walking-person');
 const progressText = document.getElementById('progress-text');
 
-// Dimensiones originales de los GIFs (fijas, ya que no se configuran en config.html)
+// Dimensiones originales de los GIFs (fijas)
 const originalGifWidth = 330;
 const originalGifHeight = 520;
 const originalFinalGifWidth = 330;
 const originalFinalGifHeight = 520;
 
 // Calcular factor de escala para ajustar la altura del GIF al contenedor (200px)
-const containerHeight = 200; // Altura del contenedor
+const containerHeight = 200;
 const scaleFactor = containerHeight / originalGifHeight; // 200 / 520 ≈ 0.3846
 const scaledWidth = originalGifWidth * scaleFactor; // 330 * 0.3846 ≈ 126.92 px
 const scaledHeight = containerHeight; // 200 px
@@ -37,9 +37,9 @@ const finalScaledHeight = containerHeight; // 200 px
 // Aplicar estilos iniciales con tamaño escalado y posición vertical personalizada
 widgetContainer.style.backgroundImage = `url('${config.backgroundUrl}')`;
 walkingPerson.src = config.gifUrl;
-walkingPerson.style.width = `${scaledWidth}px`; // Ajustar ancho escalado
-walkingPerson.style.height = `${scaledHeight}px`; // Ajustar altura escalada (200px)
-walkingPerson.style.bottom = `${config.gifBottom}px`; // Posición vertical del primer GIF
+walkingPerson.style.width = `${scaledWidth}px`;
+walkingPerson.style.height = `${scaledHeight}px`;
+walkingPerson.style.bottom = `${config.gifBottom}px`;
 
 // Manejar errores de carga de imágenes
 walkingPerson.onerror = () => {
@@ -53,7 +53,7 @@ let GOAL_AMOUNT = parseInt(config.goalAmount) || 238;
 let currentAmount = 0;
 const UPDATE_INTERVAL = 5000;
 const CELEBRATION_DURATION = 2500; // Duración del GIF de celebración (2.5 segundos)
-const TRANSITION_DELAY = 100; // Retraso de 0.1 segundos
+const TRANSITION_DELAY = 300; // Retraso de 0.3 segundos (antes y después de celebration.gif)
 
 async function fetchSubscribers() {
     try {
@@ -95,45 +95,50 @@ function startCelebration() {
     widgetContainer.style.backgroundColor = 'transparent';
     walkingPerson.style.display = 'none';
 
-    // Paso 2: Esperar 0.1 segundos y mostrar celebration.gif
+    // Paso 2: Esperar 0.3 segundos y mostrar celebration.gif
     setTimeout(() => {
         walkingPerson.src = './celebration.gif';
         walkingPerson.style.width = '1200px';
         walkingPerson.style.height = '200px';
         walkingPerson.style.left = '0';
-        walkingPerson.style.bottom = '0'; // celebration.gif no usa posición personalizada
+        walkingPerson.style.bottom = '0';
         walkingPerson.style.display = 'block';
         walkingPerson.onerror = () => {
             progressText.innerText = 'Error: No se pudo cargar celebration.gif';
         };
     }, TRANSITION_DELAY);
 
-    // Paso 3: Esperar la duración del GIF de celebración y mostrar nuevo fondo y GIF
+    // Paso 3: Esperar la duración del GIF de celebración (2.5 segundos), ocultar celebration.gif y esperar 0.3 segundos más
     setTimeout(() => {
         // Ocultar GIF de celebración
+        widgetContainer.style.backgroundImage = 'none';
+        widgetContainer.style.backgroundColor = 'transparent';
         walkingPerson.style.display = 'none';
 
-        // Mostrar nuevo fondo y GIF
-        widgetContainer.style.backgroundImage = `url('./img3.png')`;
-        widgetContainer.style.backgroundColor = '#333';
-        walkingPerson.src = config.finalGifUrl;
-        walkingPerson.style.width = `${finalScaledWidth}px`;
-        walkingPerson.style.height = `${finalScaledHeight}px`;
-        walkingPerson.style.left = '0';
-        walkingPerson.style.bottom = `${config.finalGifBottom}px`; // Posición vertical del segundo GIF
-        walkingPerson.style.display = 'block';
-        walkingPerson.onerror = () => {
-            progressText.innerText = 'Error: No se pudo cargar el GIF final';
-        };
+        // Paso 4: Esperar 0.3 segundos y mostrar nuevo fondo y GIF
+        setTimeout(() => {
+            // Mostrar nuevo fondo y GIF
+            widgetContainer.style.backgroundImage = `url('./img3.png')`;
+            widgetContainer.style.backgroundColor = '#333';
+            walkingPerson.src = config.finalGifUrl;
+            walkingPerson.style.width = `${finalScaledWidth}px`;
+            walkingPerson.style.height = `${finalScaledHeight}px`;
+            walkingPerson.style.left = '0';
+            walkingPerson.style.bottom = `${config.finalGifBottom}px`;
+            walkingPerson.style.display = 'block';
+            walkingPerson.onerror = () => {
+                progressText.innerText = 'Error: No se pudo cargar el GIF final';
+            };
 
-        // Reiniciar el porcentaje y establecer la nueva meta
-        currentAmount = 0;
-        GOAL_AMOUNT += 1000;
-        progressText.innerText = `Progreso: 0%`;
+            // Reiniciar el porcentaje y establecer la nueva meta
+            currentAmount = 0;
+            GOAL_AMOUNT += 1000;
+            progressText.innerText = `Progreso: 0%`;
 
-        // Reanudar las actualizaciones
-        updateInterval = setInterval(fetchSubscribers, UPDATE_INTERVAL);
-        fetchSubscribers();
+            // Reanudar las actualizaciones
+            updateInterval = setInterval(fetchSubscribers, UPDATE_INTERVAL);
+            fetchSubscribers();
+        }, TRANSITION_DELAY);
     }, TRANSITION_DELAY + CELEBRATION_DURATION);
 }
 
