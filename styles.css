@@ -10,7 +10,7 @@
 
 #walking-person {
     position: absolute;
-    bottom: 0; /* Alinear la base del GIF con la base del contenedor */
+    bottom: 0; /* Valor base, será sobrescrito por script.js */
     left: 0; /* Iniciar en el borde izquierdo */
     transition: left 0.5s ease; /* Movimiento suave solo en el eje horizontal */
 }

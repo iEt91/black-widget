@@ -8,11 +8,8 @@ const config = {
     gifUrl: urlParams.get('gif') || './img1.gif',
     finalGifUrl: urlParams.get('finalGif') || './img4.gif',
     goalAmount: parseInt(urlParams.get('goal')) || 238,
-    gifWidth: parseInt(urlParams.get('gifWidth')) || 330,
-    gifHeight: parseInt(urlParams.get('gifHeight')) || 520,
-    finalGifWidth: parseInt(urlParams.get('finalGifWidth')) || 330,
-    finalGifHeight: parseInt(urlParams.get('finalGifHeight')) || 520,
-    gifBottom: parseInt(urlParams.get('gifBottom')) || 0
+    gifBottom: parseInt(urlParams.get('gifBottom')) || 0, // Posición vertical del primer GIF
+    finalGifBottom: parseInt(urlParams.get('finalGifBottom')) || 0 // Posición vertical del segundo GIF
 };
 
 // Elementos del DOM
@@ -20,22 +17,29 @@ const widgetContainer = document.getElementById('widget-container');
 const walkingPerson = document.getElementById('walking-person');
 const progressText = document.getElementById('progress-text');
 
+// Dimensiones originales de los GIFs (fijas, ya que no se configuran en config.html)
+const originalGifWidth = 330;
+const originalGifHeight = 520;
+const originalFinalGifWidth = 330;
+const originalFinalGifHeight = 520;
+
 // Calcular factor de escala para ajustar la altura del GIF al contenedor (200px)
 const containerHeight = 200; // Altura del contenedor
-const scaleFactor = containerHeight / config.gifHeight; // 200 / 520 ≈ 0.3846
-const scaledWidth = config.gifWidth * scaleFactor; // 330 * 0.3846 ≈ 126.92 px
-const scaledHeight = config.gifHeight * scaleFactor; // 200 px
+const scaleFactor = containerHeight / originalGifHeight; // 200 / 520 ≈ 0.3846
+const scaledWidth = originalGifWidth * scaleFactor; // 330 * 0.3846 ≈ 126.92 px
+const scaledHeight = containerHeight; // 200 px
 
 // Calcular factor de escala para el GIF final (img4.gif)
-const finalScaleFactor = containerHeight / config.finalGifHeight; // 200 / 520 ≈ 0.3846
-const finalScaledWidth = config.finalGifWidth * finalScaleFactor; // 330 * 0.3846 ≈ 126.92 px
-const finalScaledHeight = config.finalGifHeight * finalScaleFactor; // 200 px
+const finalScaleFactor = containerHeight / originalFinalGifHeight; // 200 / 520 ≈ 0.3846
+const finalScaledWidth = originalFinalGifWidth * finalScaleFactor; // 330 * 0.3846 ≈ 126.92 px
+const finalScaledHeight = containerHeight; // 200 px
 
-// Aplicar estilos iniciales con tamaño escalado
+// Aplicar estilos iniciales con tamaño escalado y posición vertical personalizada
 widgetContainer.style.backgroundImage = `url('${config.backgroundUrl}')`;
 walkingPerson.src = config.gifUrl;
 walkingPerson.style.width = `${scaledWidth}px`; // Ajustar ancho escalado
 walkingPerson.style.height = `${scaledHeight}px`; // Ajustar altura escalada (200px)
+walkingPerson.style.bottom = `${config.gifBottom}px`; // Posición vertical del primer GIF
 
 // Manejar errores de carga de imágenes
 walkingPerson.onerror = () => {
@@ -97,6 +101,7 @@ function startCelebration() {
         walkingPerson.style.width = '1200px';
         walkingPerson.style.height = '200px';
         walkingPerson.style.left = '0';
+        walkingPerson.style.bottom = '0'; // celebration.gif no usa posición personalizada
         walkingPerson.style.display = 'block';
         walkingPerson.onerror = () => {
             progressText.innerText = 'Error: No se pudo cargar celebration.gif';
@@ -112,9 +117,10 @@ function startCelebration() {
         widgetContainer.style.backgroundImage = `url('./img3.png')`;
         widgetContainer.style.backgroundColor = '#333';
         walkingPerson.src = config.finalGifUrl;
-        walkingPerson.style.width = `${finalScaledWidth}px`; // Ajustar ancho escalado
-        walkingPerson.style.height = `${finalScaledHeight}px`; // Ajustar altura escalada
+        walkingPerson.style.width = `${finalScaledWidth}px`;
+        walkingPerson.style.height = `${finalScaledHeight}px`;
         walkingPerson.style.left = '0';
+        walkingPerson.style.bottom = `${config.finalGifBottom}px`; // Posición vertical del segundo GIF
         walkingPerson.style.display = 'block';
         walkingPerson.onerror = () => {
             progressText.innerText = 'Error: No se pudo cargar el GIF final';
