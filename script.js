@@ -42,7 +42,7 @@ walkingPerson.style.bottom = `${config.gifBottom}px`;
 let GOAL_AMOUNT = parseInt(config.goalAmount) || 238;
 let currentAmount = 0;
 const UPDATE_INTERVAL = 5000;
-const CELEBRATION_DURATION = 3000; // 3 segundos
+const CELEBRATION_DURATION = 2500; // Reducido de 3000 ms a 2500 ms (2.5 segundos)
 
 async function fetchSubscribers() {
     try {
@@ -85,7 +85,7 @@ function startCelebration() {
     widgetContainer.style.backgroundImage = ''; // Quitar el fondo inicial
     widgetContainer.style.backgroundColor = '#333'; // Fondo de respaldo para evitar blanco
 
-    // Paso 2: Mostrar el GIF de celebración por 3 segundos
+    // Paso 2: Mostrar el GIF de celebración por 2.5 segundos
     walkingPerson.src = config.gifUrlCelebration;
     walkingPerson.style.width = `1200px`; // Dimensiones reales del GIF de celebración
     walkingPerson.style.height = `200px`; // Dimensiones reales del GIF de celebración
