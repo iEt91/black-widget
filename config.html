@@ -11,7 +11,10 @@
         <label>Twitch Access Token: <input type="text" id="access-token" value="6s1g5z1old5ku6t6i0xg68e6gabmk8"></label><br>
         <label>Twitch Channel Name: <input type="text" id="channel-name" value="tangov91"></label><br>
         <label>URL Fondo (1200x200): <input type="text" id="background-url" value="./img2.png"></label><br>
-        <label>URL GIF (330x520): <input type="text" id="gif-url" value="./img1.gif"></label><br>
+        <label>URL Fondo (nuevo, 1200x200): <input type="text" id="background-url-new" value="./img3.png"></label><br>
+        <label>URL GIF Caminando (330x520): <input type="text" id="gif-url" value="./img1.gif"></label><br>
+        <label>URL GIF Celebración (330x520): <input type="text" id="gif-url-celebration" value="./celebration.gif"></label><br>
+        <label>URL GIF Corriendo (330x520): <input type="text" id="gif-url-running" value="./img4.gif"></label><br>
         <label>Meta de Suscriptores: <input type="number" id="goal-amount" value="100"></label><br>
         <label>Tamaño del GIF (ancho en px): <input type="number" id="gif-width" value="165"></label><br>
         <label>Posición Vertical GIF (px desde abajo): <input type="number" id="gif-bottom" value="0"></label><br>
@@ -25,12 +28,15 @@
             const accessToken = document.getElementById('access-token').value;
             const channelName = document.getElementById('channel-name').value;
             const background = document.getElementById('background-url').value;
+            const backgroundNew = document.getElementById('background-url-new').value;
             const gif = document.getElementById('gif-url').value;
+            const gifCelebration = document.getElementById('gif-url-celebration').value;
+            const gifRunning = document.getElementById('gif-url-running').value;
             const goal = document.getElementById('goal-amount').value;
             const gifWidth = document.getElementById('gif-width').value;
             const gifBottom = document.getElementById('gif-bottom').value;
 
-            const url = `${window.location.origin}/index.html?clientId=${encodeURIComponent(clientId)}&accessToken=${encodeURIComponent(accessToken)}&channelName=${encodeURIComponent(channelName)}&background=${encodeURIComponent(background)}&gif=${encodeURIComponent(gif)}&goal=${encodeURIComponent(goal)}&gifWidth=${encodeURIComponent(gifWidth)}&gifBottom=${encodeURIComponent(gifBottom)}`;
+            const url = `${window.location.origin}/index.html?clientId=${encodeURIComponent(clientId)}&accessToken=${encodeURIComponent(accessToken)}&channelName=${encodeURIComponent(channelName)}&background=${encodeURIComponent(background)}&backgroundNew=${encodeURIComponent(backgroundNew)}&gif=${encodeURIComponent(gif)}&gifCelebration=${encodeURIComponent(gifCelebration)}&gifRunning=${encodeURIComponent(gifRunning)}&goal=${encodeURIComponent(goal)}&gifWidth=${encodeURIComponent(gifWidth)}&gifBottom=${encodeURIComponent(gifBottom)}`;
             document.getElementById('widget-url').innerHTML = `Usa esta URL en OBS: <a href="${url}" target="_blank">${url}</a>`;
             window.location.href = url;
         });
