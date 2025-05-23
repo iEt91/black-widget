@@ -29,6 +29,8 @@ const preloadCelebration = new Image();
 preloadCelebration.src = config.gifUrlCelebration;
 const preloadBackgroundNew = new Image();
 preloadBackgroundNew.src = config.backgroundUrlNew;
+const preloadRunning = new Image();
+preloadRunning.src = config.gifUrlRunning;
 
 // Aplicar estilos iniciales
 widgetContainer.style.backgroundImage = `url('${config.backgroundUrl}')`;
@@ -40,7 +42,7 @@ walkingPerson.style.bottom = `${config.gifBottom}px`;
 let GOAL_AMOUNT = parseInt(config.goalAmount) || 238;
 let currentAmount = 0;
 const UPDATE_INTERVAL = 5000;
-const CELEBRATION_DURATION = 5000;
+const CELEBRATION_DURATION = 3000; // Cambiado a 3 segundos
 
 async function fetchSubscribers() {
     try {
@@ -77,11 +79,13 @@ async function fetchSubscribers() {
 
 function startCelebration() {
     clearInterval(updateInterval);
-    
-    // Asegurar fondo de respaldo
-    widgetContainer.style.backgroundColor = '#333';
-    
-    // Cambiar al GIF de celebración
+
+    // Paso 1: Quitar img1 (gif caminando) e img2 (fondo inicial) inmediatamente
+    walkingPerson.src = ''; // Quitar el GIF caminando
+    widgetContainer.style.backgroundImage = ''; // Quitar el fondo inicial
+    widgetContainer.style.backgroundColor = '#333'; // Fondo de respaldo para evitar blanco
+
+    // Paso 2: Mostrar el GIF de celebración por 3 segundos
     walkingPerson.src = config.gifUrlCelebration;
     walkingPerson.style.width = `165px`;
     walkingPerson.style.height = `${165 * (520/330)}px`;
@@ -89,17 +93,24 @@ function startCelebration() {
     walkingPerson.style.left = '0';
 
     setTimeout(() => {
-        // Cambiar fondo y GIF de corriendo
+        // Paso 3: Quitar el GIF de celebración
+        walkingPerson.src = '';
+
+        // Paso 4: Cargar img3 (fondo nuevo) e img4 (gif corriendo)
         widgetContainer.style.backgroundImage = `url('${config.backgroundUrlNew}')`;
         widgetContainer.style.backgroundColor = ''; // Restaurar fondo
         walkingPerson.src = config.gifUrlRunning;
         walkingPerson.style.width = `${config.gifRunningWidth}px`;
         walkingPerson.style.height = `${config.gifRunningWidth * (520/330)}px`;
         walkingPerson.style.bottom = `${config.gifRunningBottom}px`;
+        walkingPerson.style.left = '0';
+
+        // Reiniciar el progreso
         currentAmount = 0;
         GOAL_AMOUNT += 1000;
         progressText.innerText = `Progreso: 0%`;
-        walkingPerson.style.left = '0';
+        
+        // Reanudar actualizaciones
         updateInterval = setInterval(fetchSubscribers, UPDATE_INTERVAL);
         fetchSubscribers();
     }, CELEBRATION_DURATION);
