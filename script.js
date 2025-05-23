@@ -42,7 +42,7 @@ walkingPerson.style.bottom = `${config.gifBottom}px`;
 let GOAL_AMOUNT = parseInt(config.goalAmount) || 238;
 let currentAmount = 0;
 const UPDATE_INTERVAL = 5000;
-const CELEBRATION_DURATION = 3000; // Cambiado a 3 segundos
+const CELEBRATION_DURATION = 3000; // 3 segundos
 
 async function fetchSubscribers() {
     try {
@@ -87,8 +87,8 @@ function startCelebration() {
 
     // Paso 2: Mostrar el GIF de celebración por 3 segundos
     walkingPerson.src = config.gifUrlCelebration;
-    walkingPerson.style.width = `165px`;
-    walkingPerson.style.height = `${165 * (520/330)}px`;
+    walkingPerson.style.width = `1200px`; // Dimensiones reales del GIF de celebración
+    walkingPerson.style.height = `200px`; // Dimensiones reales del GIF de celebración
     walkingPerson.style.bottom = `0px`;
     walkingPerson.style.left = '0';
 
@@ -101,7 +101,7 @@ function startCelebration() {
         widgetContainer.style.backgroundColor = ''; // Restaurar fondo
         walkingPerson.src = config.gifUrlRunning;
         walkingPerson.style.width = `${config.gifRunningWidth}px`;
-        walkingPerson.style.height = `${config.gifRunningWidth * (520/330)}px`;
+        walkingPerson.style.height = `${config.gifRunningWidth * (520/330)}px`; // Mantener proporción para el GIF corriendo
         walkingPerson.style.bottom = `${config.gifRunningBottom}px`;
         walkingPerson.style.left = '0';
 
