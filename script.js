@@ -24,6 +24,12 @@ const widgetContainer = document.getElementById('widget-container');
 const walkingPerson = document.getElementById('walking-person');
 const progressText = document.getElementById('progress-text');
 
+// Pre-cargar imágenes para evitar retrasos
+const preloadCelebration = new Image();
+preloadCelebration.src = config.gifUrlCelebration;
+const preloadBackgroundNew = new Image();
+preloadBackgroundNew.src = config.backgroundUrlNew;
+
 // Aplicar estilos iniciales
 widgetContainer.style.backgroundImage = `url('${config.backgroundUrl}')`;
 walkingPerson.src = config.gifUrl;
@@ -71,16 +77,21 @@ async function fetchSubscribers() {
 
 function startCelebration() {
     clearInterval(updateInterval);
-    widgetContainer.style.opacity = '0';
+    
+    // Asegurar fondo de respaldo
+    widgetContainer.style.backgroundColor = '#333';
+    
+    // Cambiar al GIF de celebración
     walkingPerson.src = config.gifUrlCelebration;
-    walkingPerson.style.width = `165px`; // Tamaño fijo para el GIF de celebración
+    walkingPerson.style.width = `165px`;
     walkingPerson.style.height = `${165 * (520/330)}px`;
-    walkingPerson.style.bottom = `0px`; // Posición fija para el GIF de celebración
+    walkingPerson.style.bottom = `0px`;
     walkingPerson.style.left = '0';
 
     setTimeout(() => {
+        // Cambiar fondo y GIF de corriendo
         widgetContainer.style.backgroundImage = `url('${config.backgroundUrlNew}')`;
-        widgetContainer.style.opacity = '1';
+        widgetContainer.style.backgroundColor = ''; // Restaurar fondo
         walkingPerson.src = config.gifUrlRunning;
         walkingPerson.style.width = `${config.gifRunningWidth}px`;
         walkingPerson.style.height = `${config.gifRunningWidth * (520/330)}px`;
