@@ -13,11 +13,13 @@
         <label>URL Fondo (1200x200): <input type="text" id="background-url" value="./img2.png"></label><br>
         <label>URL Fondo (nuevo, 1200x200): <input type="text" id="background-url-new" value="./img3.png"></label><br>
         <label>URL GIF Caminando (330x520): <input type="text" id="gif-url" value="./img1.gif"></label><br>
+        <label>Tamaño del GIF Caminando (ancho en px): <input type="number" id="gif-width" value="165"></label><br>
+        <label>Posición Vertical GIF Caminando (px desde abajo): <input type="number" id="gif-bottom" value="0"></label><br>
         <label>URL GIF Celebración (330x520): <input type="text" id="gif-url-celebration" value="./celebration.gif"></label><br>
         <label>URL GIF Corriendo (330x520): <input type="text" id="gif-url-running" value="./img4.gif"></label><br>
+        <label>Tamaño del GIF Corriendo (ancho en px): <input type="number" id="gif-running-width" value="165"></label><br>
+        <label>Posición Vertical GIF Corriendo (px desde abajo): <input type="number" id="gif-running-bottom" value="0"></label><br>
         <label>Meta de Suscriptores: <input type="number" id="goal-amount" value="100"></label><br>
-        <label>Tamaño del GIF (ancho en px): <input type="number" id="gif-width" value="165"></label><br>
-        <label>Posición Vertical GIF (px desde abajo): <input type="number" id="gif-bottom" value="0"></label><br>
         <button type="submit">Generar Widget</button>
     </form>
     <p id="widget-url"></p>
@@ -34,9 +36,11 @@
             const gifRunning = document.getElementById('gif-url-running').value;
             const goal = document.getElementById('goal-amount').value;
             const gifWidth = document.getElementById('gif-width').value;
+            const gifRunningWidth = document.getElementById('gif-running-width').value;
             const gifBottom = document.getElementById('gif-bottom').value;
+            const gifRunningBottom = document.getElementById('gif-running-bottom').value;
 
-            const url = `${window.location.origin}/index.html?clientId=${encodeURIComponent(clientId)}&accessToken=${encodeURIComponent(accessToken)}&channelName=${encodeURIComponent(channelName)}&background=${encodeURIComponent(background)}&backgroundNew=${encodeURIComponent(backgroundNew)}&gif=${encodeURIComponent(gif)}&gifCelebration=${encodeURIComponent(gifCelebration)}&gifRunning=${encodeURIComponent(gifRunning)}&goal=${encodeURIComponent(goal)}&gifWidth=${encodeURIComponent(gifWidth)}&gifBottom=${encodeURIComponent(gifBottom)}`;
+            const url = `${window.location.origin}/index.html?clientId=${encodeURIComponent(clientId)}&accessToken=${encodeURIComponent(accessToken)}&channelName=${encodeURIComponent(channelName)}&background=${encodeURIComponent(background)}&backgroundNew=${encodeURIComponent(backgroundNew)}&gif=${encodeURIComponent(gif)}&gifCelebration=${encodeURIComponent(gifCelebration)}&gifRunning=${encodeURIComponent(gifRunning)}&goal=${encodeURIComponent(goal)}&gifWidth=${encodeURIComponent(gifWidth)}&gifRunningWidth=${encodeURIComponent(gifRunningWidth)}&gifBottom=${encodeURIComponent(gifBottom)}&gifRunningBottom=${encodeURIComponent(gifRunningBottom)}`;
             document.getElementById('widget-url').innerHTML = `Usa esta URL en OBS: <a href="${url}" target="_blank">${url}</a>`;
             window.location.href = url;
         });

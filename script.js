@@ -5,10 +5,15 @@ const config = {
     accessToken: urlParams.get('accessToken') || '6s1g5z1old5ku6t6i0xg68e6gabmk8',
     channelName: urlParams.get('channelName') || 'tangov91',
     backgroundUrl: urlParams.get('background') || './img2.png',
+    backgroundUrlNew: urlParams.get('backgroundNew') || './img3.png',
     gifUrl: urlParams.get('gif') || './img1.gif',
+    gifUrlCelebration: urlParams.get('gifCelebration') || './celebration.gif',
+    gifUrlRunning: urlParams.get('gifRunning') || './img4.gif',
     goalAmount: parseInt(urlParams.get('goal')) || 238,
     gifWidth: parseInt(urlParams.get('gifWidth')) || 165,
-    gifBottom: parseInt(urlParams.get('gifBottom')) || 0
+    gifRunningWidth: parseInt(urlParams.get('gifRunningWidth')) || 165,
+    gifBottom: parseInt(urlParams.get('gifBottom')) || 0,
+    gifRunningBottom: parseInt(urlParams.get('gifRunningBottom')) || 0
 };
 
 // Depuración: Mostrar los parámetros recibidos
@@ -67,13 +72,19 @@ async function fetchSubscribers() {
 function startCelebration() {
     clearInterval(updateInterval);
     widgetContainer.style.opacity = '0';
-    walkingPerson.src = './celebration.gif';
+    walkingPerson.src = config.gifUrlCelebration;
+    walkingPerson.style.width = `165px`; // Tamaño fijo para el GIF de celebración
+    walkingPerson.style.height = `${165 * (520/330)}px`;
+    walkingPerson.style.bottom = `0px`; // Posición fija para el GIF de celebración
     walkingPerson.style.left = '0';
 
     setTimeout(() => {
-        widgetContainer.style.backgroundImage = `url('./img3.png')`;
+        widgetContainer.style.backgroundImage = `url('${config.backgroundUrlNew}')`;
         widgetContainer.style.opacity = '1';
-        walkingPerson.src = './img4.gif';
+        walkingPerson.src = config.gifUrlRunning;
+        walkingPerson.style.width = `${config.gifRunningWidth}px`;
+        walkingPerson.style.height = `${config.gifRunningWidth * (520/330)}px`;
+        walkingPerson.style.bottom = `${config.gifRunningBottom}px`;
         currentAmount = 0;
         GOAL_AMOUNT += 1000;
         progressText.innerText = `Progreso: 0%`;
