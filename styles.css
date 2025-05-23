@@ -1,26 +1,48 @@
+/* Contenedor principal para alinear widget y slider */
+.widget-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espacio entre el widget y el slider */
+}
+
+/* Contenedor del widget */
 #widget-container {
     position: relative;
     width: 1200px;
     height: 200px;
     background-size: cover;
     background-position: center;
+    background-color: #333; /* Fondo de respaldo para evitar blanco */
     overflow: hidden;
-    opacity: 1;
-    transition: opacity 1s ease;
 }
 
 #walking-person {
     position: absolute;
-    left: 0;
-    transition: left 0.5s ease;
+    bottom: 0; /* Valor base, será sobrescrito por script.js */
+    left: 0; /* Iniciar en el borde izquierdo */
+    transition: left 0.5s ease; /* Movimiento suave solo en el eje horizontal */
 }
 
 #progress-text {
     position: absolute;
     top: 10px;
-    left: 10px;
+    left: 20px;
     color: white;
-    font-size: 20px;
+    font-size: 30px; /* Tamaño más grande */
     font-family: Arial, sans-serif;
-    text-shadow: 2px 2px 4px black;
+    text-shadow: 2px 2px 4px black; /* Sombra original */
+    animation: pulse 2s infinite ease-in-out; /* Animación de pulsar */
+}
+
+/* Definición de la animación */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1); /* Aumenta ligeramente el tamaño */
+    }
+    100% {
+        transform: scale(1);
+    }
 }
